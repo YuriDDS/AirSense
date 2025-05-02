@@ -32,7 +32,15 @@ if localizacao:
     st.markdown("### 🗺️ Localização no Mapa")
     m = folium.Map(location=[latitude, longitude], zoom_start=13)
     folium.Marker([latitude, longitude], tooltip="Você está aqui").add_to(m)
-    st_folium(m, width=700, height=400)
+    st_folium(m, width=500, height=200)
+
+    # Define tamanho da tela
+    is_mobile = st.sidebar.checkbox("Modo mobile", value=True)
+    
+    map_width = 350 if is_mobile else 700
+    map_height = 300
+    
+    st_folium(m, width=map_width, height=map_height)
 
     # Chave da API do OpenWeather
     api_key = st.secrets["OPENWEATHER_API_KEY"]
