@@ -46,7 +46,7 @@ if localizacao:
         icon=icone_personalizado
     ).add_to(m)
 
-    st_folium(m, width="100%", height=700)
+    st_folium(m, width= 100, height=400)
 
     # Chave da API do OpenWeather (configurada no secrets)
     api_key = st.secrets["OPENWEATHER_API_KEY"]
