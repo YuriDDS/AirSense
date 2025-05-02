@@ -28,11 +28,30 @@ if localizacao:
 
     st.success(f"📍 Localização encontrada: {location.address}")
 
-    # Mostrar mapa com localização
-    st.markdown("### 🗺️ Localização no Mapa")
-    m = folium.Map(location=[latitude, longitude], zoom_start=13)
-    folium.Marker([latitude, longitude], tooltip="Você está aqui").add_to(m)
-    st_folium(m, width=500, height=500)
+ # Mostrar mapa com localização
+st.markdown("### 🗺️ Localização no Mapa")
+
+# Criar mapa
+m = folium.Map(location=[latitude, longitude], zoom_start=13, control_scale=True)
+
+# Ícone leve de localização
+icone_url = "https://cdn-icons-png.flaticon.com/512/64/64113.png"
+icone_personalizado = folium.CustomIcon(
+    icon_image=icone_url,
+    icon_size=(30, 30),
+    icon_anchor=(15, 30)
+)
+
+# Adicionar marcador com ícone customizado
+folium.Marker(
+    [latitude, longitude],
+    tooltip="Você está aqui!",
+    icon=icone_personalizado
+).add_to(m)
+
+# Mostrar no Streamlit
+st_folium(m, width="100%", height=400)
+
 
     # Chave da API do OpenWeather
     api_key = st.secrets["OPENWEATHER_API_KEY"]
