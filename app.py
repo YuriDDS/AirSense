@@ -13,7 +13,7 @@ localizacao = st.text_input("Digite sua cidade, bairro ou local (ex: 'Hospital A
 
 if localizacao:
     geolocator = Nominatim(user_agent="airsense-app")
-    
+
     try:
         location = geolocator.geocode(localizacao, timeout=5)
     except (GeocoderTimedOut, GeocoderUnavailable):
@@ -28,42 +28,38 @@ if localizacao:
 
     st.success(f"📍 Localização encontrada: {location.address}")
 
- # Mostrar mapa com localização
-st.markdown("### 🗺️ Localização no Mapa")
+    # Mostrar mapa com localização
+    st.markdown("### 🗺️ Localização no Mapa")
 
-# Criar mapa
-m = folium.Map(location=[latitude, longitude], zoom_start=13, control_scale=True)
+    m = folium.Map(location=[latitude, longitude], zoom_start=13, control_scale=True)
 
-# Ícone leve de localização
-icone_url = "https://cdn-icons-png.flaticon.com/512/64/64113.png"
-icone_personalizado = folium.CustomIcon(
-    icon_image=icone_url,
-    icon_size=(30, 30),
-    icon_anchor=(15, 30)
-)
+    icone_url = "https://cdn-icons-png.flaticon.com/512/64/64113.png"
+    icone_personalizado = folium.CustomIcon(
+        icon_image=icone_url,
+        icon_size=(30, 30),
+        icon_anchor=(15, 30)
+    )
 
-    # Adicionar marcador com ícone customizado
     folium.Marker(
         [latitude, longitude],
-        tooltip="Você está aqui!",
+        tooltip="Você está aqui! 😎",
         icon=icone_personalizado
     ).add_to(m)
-    
-    # Mostrar no Streamlit
+
     st_folium(m, width="100%", height=400)
 
-
-    # Chave da API do OpenWeather
+    # Chave da API do OpenWeather (configurada no secrets)
     api_key = st.secrets["OPENWEATHER_API_KEY"]
 
-    # Qualidade do ar
+    # Requisição qualidade do ar
     air_url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={latitude}&lon={longitude}&appid={api_key}"
     air_response = requests.get(air_url)
 
-    # Clima atual
+    # Requisição clima atual
     weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={api_key}&units=metric&lang=pt_br"
     weather_response = requests.get(weather_url)
 
+    # Mostrar dados do clima
     st.markdown("### 🌦️ Condições Climáticas")
     if weather_response.status_code == 200:
         clima = weather_response.json()
@@ -79,6 +75,7 @@ icone_personalizado = folium.CustomIcon(
     else:
         st.warning("Não foi possível obter os dados do clima.")
 
+    # Mostrar qualidade do ar
     st.markdown("### 📊 Qualidade do Ar (AQI)")
     if air_response.status_code == 200:
         dados_ar = air_response.json()
@@ -96,6 +93,5 @@ icone_personalizado = folium.CustomIcon(
             st.error("⛔ Qualidade do ar: Muito ruim. Permaneça em locais fechados sempre que possível!")
     else:
         st.warning("Não foi possível obter os dados da qualidade do ar.")
-
 else:
-    st.error("📍 Localização não encontrada. Tente inserir um endereço mais específico.")
+    st.info("Digite um local acima para começar a análise 🌎")
