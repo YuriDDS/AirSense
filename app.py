@@ -42,15 +42,15 @@ icone_personalizado = folium.CustomIcon(
     icon_anchor=(15, 30)
 )
 
-# Adicionar marcador com ícone customizado
-folium.Marker(
-    [latitude, longitude],
-    tooltip="Você está aqui!",
-    icon=icone_personalizado
-).add_to(m)
-
-# Mostrar no Streamlit
-st_folium(m, width="100%", height=400)
+    # Adicionar marcador com ícone customizado
+    folium.Marker(
+        [latitude, longitude],
+        tooltip="Você está aqui!",
+        icon=icone_personalizado
+    ).add_to(m)
+    
+    # Mostrar no Streamlit
+    st_folium(m, width="100%", height=400)
 
 
     # Chave da API do OpenWeather
